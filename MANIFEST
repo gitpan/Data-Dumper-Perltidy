@@ -4,8 +4,5 @@ README
 Changes
 
 lib/Data/Dumper/Perltidy.pm
-t/00-load.t
-t/01-pod-coverage.t
-t/02-pod.t
-t/03-dumper.t
+t/dumper.t
 META.yml                                 Module meta-data (added by MakeMaker)

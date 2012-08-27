@@ -2,9 +2,9 @@ package Data::Dumper::Perltidy;
 
 ###############################################################################
 #
-# Data::Dumper::Perltidy - Stringify and pretty print Perl data structures.
+# Data::Dumper::Perltidy - Dump and pretty print Perl data structures.
 #
-# Copyright 2009, John McNamara.
+# Copyright 2009-2012, John McNamara.
 #
 # perltidy with standard settings.
 #
@@ -12,15 +12,17 @@ package Data::Dumper::Perltidy;
 #
 
 use strict;
+use warnings;
 
 use Exporter;
 use Data::Dumper ();
 use Perl::Tidy;
-use vars qw($VERSION @EXPORT @ISA);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our @EXPORT  = ('Dumper');
-@ISA = qw(Exporter);
+our @ISA     = qw(Exporter);
+our $ARGV    = '-npro';
+
 
 ###############################################################################
 #
@@ -33,7 +35,7 @@ sub Dumper {
     my $tidied;
     my $dumper = Data::Dumper::Dumper(@_);
 
-    perltidy( source => \$dumper, destination => \$tidied );
+    perltidy( argv => $ARGV, source => \$dumper, destination => \$tidied );
 
     return $tidied;
 }
@@ -46,11 +48,11 @@ __END__
 
 =head1 NAME
 
-Data::Dumper::Perltidy - Stringify and pretty print Perl data structures.
+Data::Dumper::Perltidy - Dump and pretty print Perl data structures.
 
 =head1 SYNOPSIS
 
-Use the C<Data::Dumper::Perltidy::Dumper()> function to stringify and pretty print a Perl data structure:
+To use C<Data::Dumper::Perltidy::Dumper()> to stringify and pretty print a Perl data structure:
 
     use Data::Dumper::Perltidy;
 
@@ -109,17 +111,19 @@ By comparison the standard C<Data::Dumper::Dumper()> output would be:
 
 Which isn't too bad but if you are used to Perl::Tidy and the L<perltidy> utility you may prefer the C<Data::Dumper::Perltidy::Dumper()> output.
 
-=head1 EXPORT
-
-The only function exported by Data::Dumper::Perltidy is C<Dumper()> and it is exported automatically.
-
 =head1 FUNCTIONS
 
 =head2 Dumper()
 
 The C<Dumper()> function takes a list of perl structures and returns a stringified and pretty printed form of the values in the list. The values will be named C<$VARn> in the output, where C<n> is a numeric suffix.
 
-The Data::Dumper C<$Data::Dumper::> configuration variable can be used to influence the output where applicable. For further information see the L<Data::Dumper> documentation.
+You can modify the Perl::Tidy output by passing arguments via the C<$Data::Dumper::Perltidy::ARGV> configuration variable:
+
+    $Data::Dumper::Perltidy::ARGV = '-nst -mbl=2 -pt=0 -nola';
+
+See the L<Perl::Tidy> docs for more information on the available arguments. By default C<Data::Dumper::Perltidy> uses the argument C<-npro> to ignore any local C<.perltidyrc> configuration file.
+
+The Data::Dumper C<$Data::Dumper::> configuration variables can also be used to influence the output where applicable. For further information see the L<Data::Dumper> documentation.
 
 Note: unlike C<Data::Dumper::Dumper()> this function doesn't currently return a list of strings in a list context.
 
@@ -129,59 +133,29 @@ I frequently found myself copying the output of C<Data::Dumper::Dumper()> into a
 
 =head1 LIMITATIONS
 
-This module doesn't attempt to implement all, or even most, of the functionality of C<Data::Dumper>. In addition, and possibly more regrettably, it doesn't give access to the huge array of configuration options within C<Perl::Tidy>.
-
-Patches, with tests and documentation, are welcome.
-
-I may also add an option to use L<Data::Dumper::Names> if available.
+This module doesn't attempt to implement all, or even most, of the functionality of C<Data::Dumper>.
 
 =head1 AUTHOR
 
-John McNamara C<jmcnamara@cpan.org>
+John McNamara C<< <jmcnamara@cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-data-dumper-perltidy at rt.cpan.org> or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Data-Dumper-Perltidy>.
-
-The author/maintainer will be notified, and you'll be automatically notified in turn of progress on your bug.
-
-Patches should be accompanied by tests and documentation. It isn't fair to do the fun part and leave the less-fun part to someone else. ;-)
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Data::Dumper::Perltidy
-
-You can also look for further information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Dumper-Perltidy>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Data-Dumper-Perltidy>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Data-Dumper-Perltidy/>
-
-=back
-
-You can even email the author if you wish.
+Please report any bugs or feature requests to L<https://github.com/jmcnamara/data-dumper-perltidy/issues> on Github.
 
 =head1 ACKNOWLEDGEMENTS
 
-The authors and maintainers of Data::Dumper and Perl::Tidy.
+The authors and maintainers of C<Data::Dumper> and C<Perl::Tidy>.
 
-The structure of this module was created using L<Module::Starter>.
+=head1 SEE ALSO
+
+L<Data::Dump>
+
+L<Data::Printer>, which also has a full list of alternatives.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009 John McNamara, all rights reserved.
+Copyright 2009-2012 John McNamara, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

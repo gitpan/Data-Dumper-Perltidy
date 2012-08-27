@@ -1,5 +1,13 @@
 Revision history for Data::Dumper::Perltidy
 
+0.02    28 August 2012
+
+        ! Fix for issue where local .perltidyrc caused tests to fail. 
+        RT #78806. Reported by Kevin Dawson.
+
+        + Made access to perltidy options configurable.
+
 0.01    30 January 2009
+
         First release.
 
