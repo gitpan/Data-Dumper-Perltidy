@@ -18,10 +18,10 @@ use Exporter;
 use Data::Dumper ();
 use Perl::Tidy;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our @EXPORT  = ('Dumper');
 our @ISA     = qw(Exporter);
-our $ARGV    = '-npro';
+our $ARGV    = '-npro -cab=1';
 
 
 ###############################################################################
